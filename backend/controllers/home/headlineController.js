@@ -55,8 +55,7 @@ export const getHeadline = asyncHandler(async (req, res) => {
 // route    PUT /api/home/headline/:id
 // @access  Private
 export const updateHeadlineById = asyncHandler(async (req, res) => {
-  const { body, file } = req;
-  const { titleHeadline, urlHeadline, typeHeadline } = body;
+   const { titleHeadline, urlHeadline, typeHeadline, image } = req.body;
 
   const { id } = req.params;
 
@@ -66,9 +65,7 @@ export const updateHeadlineById = asyncHandler(async (req, res) => {
     headline.urlHeadline = urlHeadline || headline.urlHeadline;
     headline.titleHeadline = titleHeadline || headline.titleHeadline;
     headline.typeHeadline = typeHeadline || headline.typeHeadline;
-    if (file) {
-      headline.image = `/uploads/${file.filename}` || headline.image;
-    }
+headline.image = image || headline.image;
   }
 
   const updateHeadline = await headline.save();

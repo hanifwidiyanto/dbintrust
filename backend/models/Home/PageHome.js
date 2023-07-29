@@ -55,7 +55,7 @@ export const PageHome = sequelize.define("page_home", {
 
 
 PageHome.hasMany(TrendHome, { foreignKey: "page_id" });
-PageHome.hasOne(HeadlineHome, { foreignKey: "page_id" });
+PageHome.hasMany(HeadlineHome, { foreignKey: "page_id" });
 PageHome.hasMany(QuickLink, { foreignKey: "page_id" });
 
 HeadlineHome.belongsTo(PageHome, { foreignKey: "page_id" });

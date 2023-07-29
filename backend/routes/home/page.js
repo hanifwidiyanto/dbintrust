@@ -13,6 +13,6 @@ router
   .route("/page/:id")
   .put(protect, updatePageById)
   .delete(protect, deletePageById)
-router.route("/page").get(getPage).post(protect, createPage);
+router.route("/page").get(getPage).post(createPage);
 
 export default router;

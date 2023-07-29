@@ -34,11 +34,13 @@ export const createWriter = asyncHandler(async (req, res) => {
 export const getWriter = asyncHandler(async (req, res) => {
   const writer = await Writer.findAll({
     include: {
-      model: Post
+      model: Post,
+      attributes: { exclude: ['content'] }, // Exclude the 'content' attribute
     },
   });
   return res.status(200).json({ writer });
 });
+
 
 // @desc    Get writer by id
 // route    GET /api/post/writer/:id

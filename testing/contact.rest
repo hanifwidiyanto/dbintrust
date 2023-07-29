@@ -1,0 +1,10 @@
+POST https://api.antidouchebag.com/api/contact
+Content-Type: application/json
+
+{
+    "name":"admin",
+    "email":"admin@admin.com",
+    "phoneNumber":12459131,
+    "subject":"admindasda123",
+    "message":"adsaddmin"
+}

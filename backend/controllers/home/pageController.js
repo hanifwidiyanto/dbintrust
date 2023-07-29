@@ -14,7 +14,7 @@ export const createPage = asyncHandler(async (req, res) => {
   if (pageName == "Home") {
     res.status(400);
     throw new Error("Page already creted");
-  } // non aktifkan kalo baru bikin
+ } // non aktifkan kalo baru bikin
 
   const page = await PageHome.create({
     pageName,

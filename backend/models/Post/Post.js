@@ -24,6 +24,11 @@ export const Post = sequelize.define("post", {
     type: DataTypes.TEXT('long'),
     allowNull: false,
   },
+
+textThumbnail :{
+type:DataTypes.STRING,
+allowNull: true,
+},
   date: {
     type: DataTypes.BIGINT,
     allowNull: false,

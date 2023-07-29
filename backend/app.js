@@ -32,6 +32,8 @@ import quickLinkPageRoute from "./routes/page/quickLink.js";
 import adPostRoute from "./routes/post/ad.js";
 import postRoute from "./routes/post/post.js";
 import writerRoute from "./routes/post/writer.js";
+import imageRoute from "./routes/img/img.js"
+import contactRoute from "./routes/contact/contact.js"
 
 import { notFound, errorHandler } from "./middleware/error.js";
 
@@ -57,15 +59,22 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://cms-intrust.vercel.app",
+      "https://www.investortrust.id",
+      "https://investor-trust.vercel.app"
+    ],
     credentials: true,
   })
 );
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+	app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // auth route
 app.use("/api/users", authRoute);
@@ -84,14 +93,20 @@ app.use("/api/home", quickLinkHomeRoute);
 // page route
 app.use("/api/page", pageRoute);
 app.use("/api/page", adPageRoute);
-app.use("/api/page/", headlinePageRoute);
-app.use("/api/page/", trendPageRoute);
-app.use("/api/page/", quickLinkPageRoute);
+app.use("/api/page", headlinePageRoute);
+app.use("/api/page", trendPageRoute);
+app.use("/api/page", quickLinkPageRoute);
 
 // post route
-app.use("/api/post/", adPostRoute);
-app.use("/api/post/", postRoute);
-app.use("/api/post/", writerRoute);
+app.use("/api/post", adPostRoute);
+app.use("/api/post", postRoute);
+app.use("/api/post", writerRoute);
+
+// image route
+app.use("/api/image", imageRoute);
+
+// contact route
+app.use("/api/contact", contactRoute);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -4,6 +4,8 @@ import {
   getPostById,
   updatePostById,
   getPost,
+updateThumbnailById,
+getPostByLink,
   deletePostById,
   postNews,
 } from "../../controllers/post/postController.js";
@@ -33,12 +35,17 @@ const upload = multer({
 
 router
   .route("/news/:id")
-  .get(protect, getPostById)
+  .get(getPostById)
   .put(protect, updatePostById)
-  .delete(protect, deletePostById);
+ 
+router.delete("/news/:id", protect, deletePostById)
+
+router.put("/thumbnail/:id", protect, upload.single("thumbnail"), updateThumbnailById)
+
 router
   .route("/news")
-  .get(protect, getPost)
+  .get( getPost)
   .post(upload.single("thumbnail"), postNews);
 
+router.get("/news-url/:url", getPostByLink)
 export default router;

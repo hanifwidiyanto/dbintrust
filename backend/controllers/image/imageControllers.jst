@@ -1,0 +1,47 @@
+import asyncHandler from "express-async-handler";
+import {Image} from "../../models/image/image.js";
+
+// @desc     Upload new images
+// route     POST /api/image/upload
+// @access   Private
+
+export const postImage= asyncHandler(async (req, res) => {
+  const { file, body } = req;
+  const { imageDesc, date, userId } = body;
+
+  if (imageDesc=== null || date === null || userId === null) {
+    res.status(400);
+    throw new Error("Content does not exist");
+  } else {
+    const formData = {
+      imageDesc,
+      date,
+      image: `/uploads/${file.filename}`,
+      user_id: userId,
+    };
+    const post = await Image.create(formData);
+    res.status(201).json({ message: "Image Uploaded", post });
+  }
+});
+
+
+// @desc     Upload new images
+// route     POST /api/image/get
+// @access   Public
+
+export const postImage= asyncHandler(async (req, res) => {
+const data = await Image.findAll()
+res.status(200).json({data})
+});
+
+
+
+// @desc     Delete Images by ID
+// route     POST /api/image/delete/:id
+// @access   Public
+
+export const postImage= asyncHandler(async (req, res) => {
+	const id = req.params.id
+
+	const image 
+});

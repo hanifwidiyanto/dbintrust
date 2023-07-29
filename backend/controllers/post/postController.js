@@ -9,10 +9,11 @@ import { Page } from "../../models/Page/Page.js";
 // @access  Private
 export const postNews = asyncHandler(async (req, res) => {
   const { file, body } = req;
-  const { titlePost, linkPost, content, date, pageId, writerId, type } = body;
-  const checkPage = await Page.findOne({
+  const { titlePost, linkPost, content, date, pageId, writerId, type, textThumbnail } = body;
+console.log(file,body)  
+const checkPage = await Page.findOne({
     where: {
-      page_id: parseInt(pageId),
+      page_id: pageId,
     },
   });
 
@@ -41,9 +42,10 @@ export const postNews = asyncHandler(async (req, res) => {
       type,
       linkPost,
       content,
-      date: parseInt(date),
+      date,
       thumbnail: `/uploads/${file.filename}`,
-      page_id: parseInt(pageId),
+      textThumbnail,
+      page_id: pageId,
       writer_id: writerId,
     };
     const post = await Post.create(formData);
@@ -55,15 +57,42 @@ export const postNews = asyncHandler(async (req, res) => {
 // route    GET /api/post/news
 // @access  Public
 export const getPost = asyncHandler(async (req, res) => {
-  const post = await Post.findAll();
+  const post = await Post.findAll({
+    attributes: { exclude: ['content'] },
+    include: [{ model: Page }] 
+  });
   return res.status(200).json({ post });
+});
+
+
+
+// @desc     Get Post By Title
+// route     Get /api/post/news-url/:url
+// access    Public
+export const getPostByLink = asyncHandler(async(req,res)=>{
+const url = req.params.url
+
+const dataUrl = `/${url}`
+
+const post = await Post.findOne({
+	 where :{
+	linkPost: dataUrl,
+	},
+	include:{
+	model:Writer,
+	}
+})
+const all = await Post.findAll()
+console.log(all)
+
+return res.status(200).json({post});
 });
 
 // @desc    Update post by id
 // route    PUT /api/post/news/:id
 // @access  Private
 export const updatePostById = asyncHandler(async (req, res) => {
-  const { titlePost, linkPost, content, date, thumbnail } = req.body;
+  const { titlePost, linkPost, content, date, pageId, writerId, type } = req.body;
 
   const { id } = req.params;
 
@@ -74,7 +103,9 @@ export const updatePostById = asyncHandler(async (req, res) => {
     post.linkPost = linkPost || post.linkPost;
     post.content = content || post.content;
     post.date = date || post.date;
-    post.thumbnail = thumbnail || post.thumbnail;
+    post.page_id = pageId || post.page_id;
+    post.type  = type || post.type;
+    post.writer_id  = writerId || post.writer_id;
   }
 
   const updatePost = await post.save();
@@ -85,11 +116,39 @@ export const updatePostById = asyncHandler(async (req, res) => {
   });
 });
 
+
+// @desc    Update thumbnail post by id
+// route    PUT /api/post/thumbnail/:id
+// @access  Private
+export const updateThumbnailById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const post = await Post.findByPk(id);
+
+  if (post) {
+    // Check if there is a file uploaded and update the thumbnail accordingly
+    if (req.file) {
+      post.thumbnail = `/uploads/${req.file.filename}`; // Assuming you save the file path in the database
+    }
+  } else {
+    return res.status(404).json({ message: "Post not found." });
+  }
+
+  const updatedPost = await post.save();
+
+  res.status(200).json({
+    message: "Thumbnail updated.",
+    updatedPost,
+  });
+});
+
+
 // @desc    Delete post by id
 // route    DELETE /api/post/news/:id
 // @access  Private
 export const deletePostById = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+
+  const id = req.params.id;
   const post = await Post.findByPk(id);
 
   if (!post) {
@@ -109,7 +168,7 @@ export const deletePostById = asyncHandler(async (req, res) => {
 // @access  Public
 export const getPostById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const post = await Post.findAll({
+  const post = await Post.findOne({
     where: {
       post_id: id,
     },

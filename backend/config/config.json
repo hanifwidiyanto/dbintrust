@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "userint",
+    "password": "pass",
+    "database": "intrust_db",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port": 3306,
+    "logging": false,
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  },
+  "test": {
+    "username": "userint",
+    "password": "pass",
+    "database": "intrust_db_test",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port": 3306,
+    "logging": false,
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "mysql",
+    "logging": false,
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  }
+}
+
