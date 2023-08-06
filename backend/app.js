@@ -60,6 +60,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
+      "https://investor-trust-cms.user.cloudjkt01.com/",
       "http://localhost:5173",
       "http://localhost:3000",
       "https://cms-intrust.vercel.app",
